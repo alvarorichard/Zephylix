@@ -7,6 +7,8 @@
 .xmake/linux/x86_64/cache
 .xmake/ui.log
 .xmake/linux/x86_64/tmp
+.xmake/linux/x86_64/build
+
 
 # Diretório de saida do xmake
 build
