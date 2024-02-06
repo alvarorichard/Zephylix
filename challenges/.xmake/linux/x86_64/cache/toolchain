@@ -1,0 +1,28 @@
+{
+    zig_arch_x86_64_plat_linux = {
+        zig = "/usr/bin/zig",
+        plat = "linux",
+        arch = "x86_64",
+        __global = true
+    },
+    tool_target_doubly_linked_list_linux_x86_64_cc = {
+        toolchain_info = {
+            plat = "linux",
+            name = "clang",
+            arch = "x86_64",
+            cachekey = "clang_arch_x86_64_plat_linux"
+        },
+        toolname = "clang",
+        program = "/usr/bin/clang"
+    },
+    tool_target_doubly_linked_list_linux_x86_64_ld = {
+        toolchain_info = {
+            plat = "linux",
+            name = "clang",
+            arch = "x86_64",
+            cachekey = "clang_arch_x86_64_plat_linux"
+        },
+        toolname = "clangxx",
+        program = "/usr/bin/clang++"
+    }
+}
