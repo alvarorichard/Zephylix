@@ -11,6 +11,7 @@ import static javax.management.Query.match;
 import static zephylix.TokenType.*;
 
 
+
 public class Scanner {
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
@@ -74,6 +75,7 @@ public class Scanner {
                 lox.error(line, "Unexpected character.");
                 break;
         }
+        // continuar em Number literals 
     }
     private void string(){
         while (peek() != '"' && !isAtEnd()){
