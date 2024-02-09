@@ -9,13 +9,11 @@ import java.util.List;
 import java.nio.charset.Charset;
 import java.util.*;
 
-
-
-
-
-
+import static zephylix.TokenType.*;
 
 public class lox {
+    static boolean hadError = false;
+
     public static void main(String[] args) {
         if (args.length > 1) {
             System.out.println("Usage: lox [script]");
@@ -30,6 +28,7 @@ public class lox {
     private static void runFile(String path) throw IOException{
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset()));
+        if (hadError) System.exit(65);
 
     }
     private static void runPrompt() throws IOException {
@@ -42,10 +41,11 @@ public class lox {
             run(line);
         }
     }
-    private static void runfile(String path) throws IOException {
-        byte[] bytes = Files.readAllBytes(Paths.get(path));
-        run(new String(bytes, Charset.defaultCharset()));
-    }
+//    private static void runfile(String path) throws IOException {
+//        byte[] bytes = Files.readAllBytes(Paths.get(path));
+//        run(new String(bytes, Charset.defaultCharset()));
+//        if (hadError) System.exit(65);
+//    }
     private static void runPrompt() throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
@@ -54,6 +54,8 @@ public class lox {
             String line = reader.readLine();
             if (line == null) break;
             run(line);
+            hadError = false;
+
         }
     }
     private static void run (String source) {
@@ -74,7 +76,9 @@ public class lox {
             "[line " + line + "] Error" + where + ": " + message);
         hadError = true;
     }
-    static boolean hadError = false;
+
+   // if (hadError) System.exit(65);
+
 
 
 
