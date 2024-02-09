@@ -14,9 +14,9 @@ import static zephylix.TokenType.*;
 public class lox {
     static boolean hadError = false;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length > 1) {
-            System.out.println("Usage: lox [script]");
+            System.out.println("Usage: jlox [script]");
             System.exit(64);
         } else if (args.length == 1) {
             runFile(args[0]);
@@ -25,11 +25,9 @@ public class lox {
         }
     }
 
-    private static void runFile(String path) throw IOException{
+    private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset()));
-        if (hadError) System.exit(65);
-
     }
     private static void runPrompt() throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
