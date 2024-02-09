@@ -62,10 +62,31 @@ public class Scanner {
                     addToken(SLASH);
                 }
                 break;
+            case ' ':
+            case '\r':
+            case '\t':
+                break;
+            case '\n':
+                line++;
+                break;
+            case '"': string(); break;
             default:
                 lox.error(line, "Unexpected character.");
                 break;
         }
+    }
+    private void string(){
+        while (peek() != '"' && !isAtEnd()){
+            if (peek() == '\n') line++;
+            advance();
+        }
+        if (isAtEnd()){
+            lox.error(line, "Unterminated string.");
+            return;
+        }
+        advance();
+        String value = source.substring(start + 1, current - 1);
+        addToken(STRING, value);
     }
 
     private char peek(){
