@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import static javax.management.Query.match;
 import static zephylix.TokenType.*;
 
+
 public class Scanner {
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
@@ -54,10 +55,22 @@ public class Scanner {
             case '=': addToken(match('=') ? EQUAL_EQUAL : EQUAL); break;
             case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
             case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
+            case '/':
+                if (match('/')){
+                    while (peek() != '\n' && !isAtEnd()) advance();
+                } else {
+                    addToken(SLASH);
+                }
+                break;
             default:
                 lox.error(line, "Unexpected character.");
                 break;
         }
+    }
+
+    private char peek(){
+        if (isAtEnd()) return '\0';
+        return source.charAt(current);
     }
     private boolean match(char expected){
         if (isAtEnd()) return false;
