@@ -36,11 +36,19 @@ public class Scanner {
         tokens.add(new Token(EOF, "", null, line));
         return tokens;
     }
-
+//Método principal que percorre o source, identifica tokens, e os adiciona à lista tokens.
     private boolean isAtEnd() {
         return current >= source.length();
     }
 
+    //Em cada volta do loop, verificamos um único token.
+    //Este é o verdadeiro coração do scanner.
+    //Começaremos de forma simples.
+    //Imagine se cada lexema tivesse apenas um caractere.
+    //Tudo o que você precisa fazer é consumir o próximo caractere e escolher um tipo de token para ele.
+    //Vários lexemas são apenas um único caractere no Lox, então vamos começar com eles.
+
+    //Método auxiliar que verifica se o scanner alcançou o fim do código fonte.
     private void scanToken(){
         char c = advance();
         switch (c){
@@ -86,9 +94,11 @@ public class Scanner {
         }
         
     }
+    //Método que identifica o próximo token baseado no caractere atual e adiciona esse token à lista tokens.
 
     private static final Map<String, TokenType> keywords;
 
+    //Define um mapeamento de palavras-chave da linguagem para seus respectivos tipos de token.
     static {
         keywords = new HashMap<>();
         keywords.put("and",    AND);
@@ -109,6 +119,8 @@ public class Scanner {
         keywords.put("while",  WHILE);
     }
 
+    //Bloco estático para inicializar o mapeamento de palavras-chave.
+
     private void string(){
         while (peek() != '"' && !isAtEnd()){
             if (peek() == '\n') line++;
@@ -123,13 +135,22 @@ public class Scanner {
         addToken(STRING, value);
     }
 
+    //O método advance() consome o próximo caractere no arquivo de origem e o retorna.
+    //Onde advance() é para entrada, addToken() é para saída.
+    //Ele pega o texto do lexema atual e cria um novo token para ele.
+    //Usaremos a outra sobrecarga para lidar com tokens com valores literais em breve.
+
+
+//Método para identificar e adicionar tokens de strings literais.
     private char peek(){
         if (isAtEnd()) return '\0';
         return source.charAt(current);
     }
+    //Método que retorna o caractere atual sem consumi-lo.
     private boolean isDigit(char c) {
         return c >= '0' && c <= '9';
     }
+    //Método auxiliar para verificar se um caractere é um dígito.
     private void number() {
         while (isDigit(peek())) advance();
 
@@ -144,7 +165,7 @@ public class Scanner {
         addToken(NUMBER,
                 Double.parseDouble(source.substring(start, current)));
     }
-
+//Método para identificar e adicionar tokens numéricos, incluindo partes fracionárias.
     private char peekNext() {
         if (current + 1 >= source.length()) return '\0';
         return source.charAt(current + 1);
@@ -171,7 +192,7 @@ public class Scanner {
         return isAlpha(c) || isDigit(c);
     }
 
-
+//Método auxiliar para verificar se um caractere é alfanumérico.
     private boolean match(char expected){
         if (isAtEnd()) return false;
         if (source.charAt(current) != expected) return false;
@@ -179,10 +200,11 @@ public class Scanner {
         current++;
         return true;
     }
-
+//Método que consome o próximo caractere se ele corresponder ao caractere esperado.
     private char advance(){
         return source.charAt(current++);
     }
+    //Método que consome e retorna o próximo caractere do código fonte.
     private void addToken(TokenType type){
         addToken(type, null);
     }
@@ -191,6 +213,16 @@ public class Scanner {
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, literal, line));
     }
-    
+
+    //    source: o código fonte a ser analisado.
+    //    tokens: uma lista para armazenar os tokens identificados.
+    //    start: índice do início do token atual no source.
+    //    current: índice do caractere atual sendo analisado no source.
+    //    line: mantém o controle do número da linha atual, útil para relatar erros.
+
+//Cada parte desse código trabalha em conjunto para desmembrar o código fonte em tokens,
+// que são então usados por outras partes de um interpretador ou compilador para análise sintática e
+// semântica.
+
 
 }
