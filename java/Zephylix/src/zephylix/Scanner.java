@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.lang.Character.isDigit;
 import static javax.management.Query.match;
 import static zephylix.TokenType.*;
 
@@ -72,10 +74,17 @@ public class Scanner {
                 break;
             case '"': string(); break;
             default:
-                lox.error(line, "Unexpected character.");
+                if (isDigit(c)){
+                    number();
+                } else if (isAlpha(c)){
+                    identifier();
+                } else {
+                    lox.error(line, "Unexpected character.");
+                }
                 break;
+
         }
-        // continuar em Number literals 
+        // continuar em Number literals
     }
     private void string(){
         while (peek() != '"' && !isAtEnd()){
@@ -95,6 +104,46 @@ public class Scanner {
         if (isAtEnd()) return '\0';
         return source.charAt(current);
     }
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+    private void number() {
+        while (isDigit(peek())) advance();
+
+        // Look for a fractional part.
+        if (peek() == '.' && isDigit(peekNext())) {
+            // Consume the "."
+            advance();
+
+            while (isDigit(peek())) advance();
+        }
+
+        addToken(NUMBER,
+                Double.parseDouble(source.substring(start, current)));
+    }
+
+    private char peekNext() {
+        if (current + 1 >= source.length()) return '\0';
+        return source.charAt(current + 1);
+    }
+
+    private void identifier() {
+        while (isAlphaNumeric(peek())) advance();
+
+        addToken(IDENTIFIER);
+    }
+
+    private boolean isAlpha(char c) {
+        return (c >= 'a' && c <= 'z') ||
+                (c >= 'A' && c <= 'Z') ||
+                c == '_';
+    }
+
+    private boolean isAlphaNumeric(char c) {
+        return isAlpha(c) || isDigit(c);
+    }
+
+
     private boolean match(char expected){
         if (isAtEnd()) return false;
         if (source.charAt(current) != expected) return false;

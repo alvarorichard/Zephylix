@@ -60,7 +60,4 @@ public class lox {
         hadError = true;
     }
 
-
-
-
 }
