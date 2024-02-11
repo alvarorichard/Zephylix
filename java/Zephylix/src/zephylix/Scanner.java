@@ -67,8 +67,12 @@ public class Scanner {
             case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
             case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
             case '/':
-                if (match('/')){
+                if (match('/')) {
                     while (peek() != '\n' && !isAtEnd()) advance();
+                }else if (match('*')){
+                        //comentário de bloco
+                        blockComment();
+
                 } else {
                     addToken(SLASH);
                 }
@@ -120,6 +124,34 @@ public class Scanner {
     }
 
     //Bloco estático para inicializar o mapeamento de palavras-chave.
+
+
+
+    // meotodo para comentarios de bloco
+    private void blockComment() {
+        int commentNesting = 1;
+        while (commentNesting > 0 && !isAtEnd()) {
+            if (peek() == '*' && peekNext() == '/') {
+                // Found the end of a block comment.
+                advance(); // Consume '*'
+                advance(); // Consume '/'
+                commentNesting--;
+            } else if (peek() == '/' && peekNext() == '*') {
+                // Found the start of a nested block comment.
+                advance(); // Consume '/'
+                advance(); // Consume '*'
+                commentNesting++;
+            } else {
+                if (peek() == '\n') line++;
+                advance();
+            }
+        }
+
+        if (isAtEnd() && commentNesting > 0) {
+            lox.error(line, "Unterminated block comment.");
+        }
+    }
+
 
     private void string(){
         while (peek() != '"' && !isAtEnd()){
