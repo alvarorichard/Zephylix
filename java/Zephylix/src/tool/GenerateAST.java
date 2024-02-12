@@ -31,6 +31,9 @@ public class GenerateAST {
         writer.println();
         writer.println("abstract class " + baseName + " {");
         defineVisitor(writer, baseName, types);
+        // a base  accept() method
+        writer.println();
+        writer.println("  abstract <R> R accept(Visitor<R> visitor);");
 
         writer.println("}");
         writer.close();
@@ -71,6 +74,12 @@ public class GenerateAST {
             writer.println("    final " + field + ";");
         }
         writer.println("  }");
+        writer.println();
+        writer.println("        @Override");
+        writer.println("        <R> R accept(Visitor<R> visitor) {");
+        writer.println("            return visitor.visit" +
+                className + baseName + "(this);");
+        writer.println("        }");
     }
 
     abstract class Pastry {
