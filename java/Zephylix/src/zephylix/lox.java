@@ -15,6 +15,9 @@ import static zephylix.TokenType.*;
 
 public class lox {
     static boolean hadError = false;
+    static boolean hadRuntimeError = false;
+
+    private static final Interpreter interpreter = new Interpreter();
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
@@ -30,6 +33,8 @@ public class lox {
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset()));
+        if (hadError) System.exit(65);
+        if (hadRuntimeError) System.exit(70);
     }
     private static void runPrompt() throws IOException {
         InputStreamReader input = new InputStreamReader(System.in);
@@ -54,6 +59,7 @@ public class lox {
 //            System.out.println(token);
 //        }
         if (hadError) return;
+        interpreter.interpret(expression);
         System.out.println(new AstPrinter().print(expression));
     }
 
@@ -65,6 +71,12 @@ public class lox {
             "[line " + line + "] Error" + where + ": " + message);
         hadError = true;
     }
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() +
+            "\n[line " + error.token.line + "]");
+        hadError = true;
+    }
+
 
     static void error(Token token, String message) {
         if (token.type == EOF) {
