@@ -111,6 +111,31 @@ public class Parser {
         throw error(peek(), "Expect expression.");
     }
 
+    //desafio comma
+    private Expr comma() {
+        Expr expr = equality();
+        while (match(COMMA)) {
+            Token operator = previous();
+            Expr right = equality(); // Or the appropriate method call depending on your grammar
+            expr = new Expr.Binary(expr, operator, right);
+        }
+        return expr;
+    }
+
+    //desafio comma
+    private Expr conditional() {
+        Expr expr = logicalOr(); // Assuming logicalOr() is a method that parses logical OR expressions
+        if (match(QUESTION_MARK)) {
+            Expr trueBranch = expression();
+            consume(COLON, "Expect ':' after expression.");
+            Expr falseBranch = conditional(); // Right associativity
+            expr = new Expr.Conditional(expr, trueBranch, falseBranch);
+        }
+        return expr;
+    }
+
+
+
     private boolean match(TokenType... types) {
         for (TokenType type : types) {
             if (check(type)) {
@@ -152,6 +177,8 @@ public class Parser {
         Lox.error(token, message);
         return new ParseError();
     }
+
+
 
     private void synchronize() {
         advance();
