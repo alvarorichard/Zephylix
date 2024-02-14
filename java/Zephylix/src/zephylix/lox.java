@@ -52,14 +52,15 @@ public class lox {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
+        //Expr expression = parser.parse(); esta linha foi comentada para verificação do parser e ela pode quebrar
+        List<Stmt> statements = parser.parse();
 
         // por agora, so imprime os tokens
 //        for (Token token : tokens) {
 //            System.out.println(token);
 //        }
         if (hadError) return;
-        interpreter.interpret(expression);
+        interpreter.interpret(statements);
         System.out.println(new AstPrinter().print(expression));
     }
 

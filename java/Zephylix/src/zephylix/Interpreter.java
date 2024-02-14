@@ -5,6 +5,7 @@ import java.util.List;
 
 
 
+
 import static zephylix.TokenType.*;
 
 
@@ -13,18 +14,19 @@ import static zephylix.TokenType.*;
 // classe raiz que usamos para nos referir a um valor Lox em nosso Java código.
 // Para satisfazer a interface Visitor, precisamos definir métodos de visita para cada das quatro classes de árvores de
 // expressão que nosso analisador produz. Começaremos com o mais simples
-public class Interpreter implements Expr.Visitor<Object> {
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitLiteralExpr(Expr.Literal expr) {
         return expr.value;
     }
 
-    @Override Object visitUnaryExpr(Expr.Unary expr) {
+    @Override
+    Object visitUnaryExpr(Expr.Unary expr) {
         Object right = evaluate(expr.right);
         switch (expr.operator.type) {
             case MINUS:
-                return -(double)right;
+                return -(double) right;
             case BANG:
                 return !isTruthy(right);
         }
@@ -43,9 +45,10 @@ public class Interpreter implements Expr.Visitor<Object> {
 
     private boolean isTruthy(Object object) {
         if (object == null) return false;
-        if (object instanceof Boolean) return (boolean)object;
+        if (object instanceof Boolean) return (boolean) object;
         return true;
     }
+
     private boolean isEqual(Object a, Object b) {
         if (a == null && b == null) return true;
         if (a == null) return false;
@@ -73,6 +76,24 @@ public class Interpreter implements Expr.Visitor<Object> {
         return expr.accept(this);
     }
 
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
+    }
+
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;
+    }
+
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
         Object left = evaluate(expr.left);
@@ -80,50 +101,54 @@ public class Interpreter implements Expr.Visitor<Object> {
         switch (expr.operator.type) {
             case MINUS:
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left - (double)right;
+                return (double) left - (double) right;
             case SLASH:
                 checkNumberOperands(expr.operator, left, right);
                 //challenge
-                if ((double)right == 0) {
+                if ((double) right == 0) {
                     throw new RuntimeError(expr.operator, "Cannot divide by zero.");
                 }
-                return (double)left / (double)right;
+                return (double) left / (double) right;
             case STAR:
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left * (double)right;
+                return (double) left * (double) right;
             case PLUS:
                 if (left instanceof Double && right instanceof Double) {
-                    return (double)left + (double)right;
+                    return (double) left + (double) right;
                 }
                 if (left instanceof String && right instanceof String) {
-                    return (String)left + (String)right;
+                    return (String) left + (String) right;
                 }
                 throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
             case GREATER:
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left > (double)right;
+                return (double) left > (double) right;
             case GREATER_EQUAL:
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left >= (double)right;
+                return (double) left >= (double) right;
             case LESS:
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left < (double)right;
+                return (double) left < (double) right;
             case LESS_EQUAL:
                 checkNumberOperands(expr.operator, left, right);
-                return (double)left <= (double)right;
-            case BANG_EQUAL: return !isEqual(left, right);
-            case EQUAL_EQUAL: return isEqual(left, right);
+                return (double) left <= (double) right;
+            case BANG_EQUAL:
+                return !isEqual(left, right);
+            case EQUAL_EQUAL:
+                return isEqual(left, right);
         }
         return null;
     }
 
-    public void interpret(Expr expression) {
+    public void interpret(List<Stmt> statements) {
         try {
-            Object value = evaluate(expression);
-            System.out.println(stringify(value));
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
         } catch (RuntimeError error) {
-            lox.runtimeError(error);
+            Lox.runtimeError(error);
         }
+
     }
 
 }
