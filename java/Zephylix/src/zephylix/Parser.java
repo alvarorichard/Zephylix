@@ -67,7 +67,7 @@ public class Parser {
         if (match(BREAK)) return breakStatement();
         return expressionStatement();
     }
-    
+
     private Stmt breakStatement() {
         if (!inLoop) {
             throw error(previous(), "Cannot use 'break' outside of a loop.");
