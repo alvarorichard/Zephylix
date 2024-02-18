@@ -15,6 +15,8 @@ public class Parser {
 
     private static class ParseError extends RuntimeException {}
     private final List<Token> tokens;
+
+    private boolean inLoop = false;
     private int current = 0;
 
     List<Stmt> parse() {
@@ -61,8 +63,19 @@ public class Parser {
         if (match(PRINT)) return printStatement();
         if (match(WHILE)) return whileStatement();
         if (match(LEFT_BRACE)) return new Stmt.Block(block());
+        //break challenge
+        if (match(BREAK)) return breakStatement();
         return expressionStatement();
     }
+    
+    private Stmt breakStatement() {
+        if (!inLoop) {
+            throw error(previous(), "Cannot use 'break' outside of a loop.");
+        }
+        consume(SEMICOLON, "Expect ';' after 'break'.");
+        return new Stmt.Break();
+    }
+
 
     private Stmt forStatement() {
         consume(LEFT_PAREN, "Expect '(' after 'for'.");
