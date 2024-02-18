@@ -1,6 +1,7 @@
 package zephylix;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 
@@ -210,6 +211,23 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return isEqual(left, right);
         }
         return null;
+    }
+
+    @Override
+    public Object visitCallExpr(Expr.Call expr) {
+        Object callee = evaluate(expr.callee);
+        List<Object> arguments = new ArrayList<>();
+        for (Expr argument : expr.arguments) {
+            arguments.add(evaluate(argument));
+        }
+        if (!(callee instanceof LoxCallable)) {
+            throw new RuntimeError(expr.paren, "Can only call functions and classes.");
+        }
+        LoxCallable function = (LoxCallable) callee;
+        if (arguments.size() != function.arity()) {
+            throw new RuntimeError(expr.paren, "Expected " + function.arity() + " arguments but got " + arguments.size() + ".");
+        }
+        return function.call(this, arguments);
     }
 
     public void interpret(List<Stmt> statements) {

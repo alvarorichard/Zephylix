@@ -13,7 +13,9 @@ public class Parser {
     //only now we’re reading tokens instead of characters
     // We store the list of tokens and use current to point to the next token eagerly waiting to be parsed.
 
-    private static class ParseError extends RuntimeException {}
+    private static class ParseError extends RuntimeException {
+    }
+
     private final List<Token> tokens;
 
     private boolean inLoop = false;
@@ -39,7 +41,7 @@ public class Parser {
         }
     }
 
-// Each method for parsing a grammar rule produces a syntax tree for that rule and returns it to
+    // Each method for parsing a grammar rule produces a syntax tree for that rule and returns it to
 // the caller. When the body of the rule contains a nonterminal—a reference to another rule—we call
 // that other rule’s method.
     private Expr expression() {
@@ -58,7 +60,7 @@ public class Parser {
     }
 
     private Stmt statement() {
-        if(match(FOR)) return forStatement();
+        if (match(FOR)) return forStatement();
         if (match(IF)) return ifStatement();
         if (match(PRINT)) return printStatement();
         if (match(WHILE)) return whileStatement();
@@ -147,6 +149,7 @@ public class Parser {
         consume(SEMICOLON, "Expect ';' after variable declaration.");
         return new Stmt.Var(name, initializer);
     }
+
     private Stmt whileStatement() {
         consume(LEFT_PAREN, "Expect '(' after 'while'.");
         Expr condition = expression();
@@ -160,6 +163,7 @@ public class Parser {
         consume(SEMICOLON, "Expect ';' after expression.");
         return new Stmt.Expression(expr);
     }
+
     private List<Stmt> block() {
         List<Stmt> statements = new ArrayList<>();
         while (!check(RIGHT_BRACE) && !isAtEnd()) {
@@ -170,13 +174,13 @@ public class Parser {
     }
 
     private Expr assignment() {
-        Expr expr = or ();
+        Expr expr = or();
         //Expr expr = equality(); cuidado isso pode causar problemas
         if (match(EQUAL)) {
             Token equals = previous();
             Expr value = assignment();
             if (expr instanceof Expr.Variable) {
-                Token name = ((Expr.Variable)expr).name;
+                Token name = ((Expr.Variable) expr).name;
                 return new Expr.Assign(name, value);
             }
             error(equals, "Invalid assignment target.");
@@ -194,7 +198,7 @@ public class Parser {
         return expr;
     }
 
-    private Expr and(){
+    private Expr and() {
         Expr expr = equality();
         while (match(AND)) {
             Token operator = previous();
@@ -202,7 +206,6 @@ public class Parser {
             expr = new Expr.Logical(expr, operator, right);
         }
     }
-
 
 
     private Expr equality() {
@@ -263,6 +266,21 @@ public class Parser {
         return call();
     }
 
+    private Expr finishCall(Expr callee) {
+        List<Expr> arguments = new ArrayList<>();
+        if(!check(RIGHT_PAREN)){
+            do{
+                if (arguments.size() >= 255) {
+                    error(peek(), "Cannot have more than 255 arguments.");
+                }
+                arguments.add(expression());
+            } while (match(COMMA));
+        }
+        Token paren = consume(RIGHT_PAREN, "Expect ')' after arguments.");
+        return new Expr.Call(callee, paren, arguments);
+    }
+
+
     private Expr call() {
         Expr expr = primary();
         while (true) {
@@ -274,6 +292,8 @@ public class Parser {
         }
         return expr;
     }
+
+
 
     private Expr primary() {
         if (match(FALSE)) return new Expr.Literal(false);
