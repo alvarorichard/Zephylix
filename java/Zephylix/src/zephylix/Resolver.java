@@ -48,8 +48,8 @@ public class Resolver implements Expr.Visitor<Void>,Stmt.Visitor {
         if (stmt.elseBranch != null) resolve(stmt.elseBranch);
         return null;
     }
-//teste commit 
-
+//teste commit
+//outro teste
     void resolve(List<Stmt> statements){
         for (Stmt statement : statements){
             resolve(statement);
