@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Map;
 
-public class Resolver implements Expr.Visitor<Void>,Stmt.Visitor {
+public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
     private final Interpreter interpreter;
 
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
 
-    Resolver(Interpreter interpreter){
+    Resolver(Interpreter interpreter) {
         this.interpreter = interpreter;
     }
 
     @Override
-    public Void visitBlockStmt(Stmt.Block stmt){
+    public Void visitBlockStmt(Stmt.Block stmt) {
         beginScope();
         resolve(stmt.statements);
         endScope();
@@ -50,20 +50,36 @@ public class Resolver implements Expr.Visitor<Void>,Stmt.Visitor {
     }
 
     @Override
-    public Void visitPrintStmt(Stmt.Print stmt){
+    public Void visitPrintStmt(Stmt.Print stmt) {
         resolve(stmt.expression);
         return null;
     }
 
+    @Override
+    public Void visitReturnStmt(Stmt.Return stmt) {
+        if (stmt.value != null) {
+            resolve(stmt.value);
+        }
+        return null;
+    }
 
-//teste commit
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt) {
+        resolve(stmt.condition);
+        resolve(stmt.body);
+        return null;
+    }
+
+
+    //teste commit
 //outro teste
-    void resolve(List<Stmt> statements){
-        for (Stmt statement : statements){
+    void resolve(List<Stmt> statements) {
+        for (Stmt statement : statements) {
             resolve(statement);
         }
     }
-    private void resolve(Stmt statement){
+
+    private void resolve(Stmt statement) {
         stmt.accept(this);
     }
 
@@ -78,22 +94,22 @@ public class Resolver implements Expr.Visitor<Void>,Stmt.Visitor {
     }
 
 
-    private  void resolve(Expr expr){
+    private void resolve(Expr expr) {
         expr.accept(this);
     }
 
-    private void beginScope(){
+    private void beginScope() {
         scopes.push(new HashMap<String, Boolean>());
     }
 
-    private void endScope(){
+    private void endScope() {
         scopes.pop();
     }
 
-    private void declare(Token name){
+    private void declare(Token name) {
         if (scopes.isEmpty()) return;
         Map<String, Boolean> scope = scopes.peek();
-        if (scope.containsKey(name.lexeme)){
+        if (scope.containsKey(name.lexeme)) {
             lox.error(name, "Variable with this name already declared in this scope.");
         }
         scope.put(name.lexeme, false);
@@ -114,12 +130,19 @@ public class Resolver implements Expr.Visitor<Void>,Stmt.Visitor {
     }
 
     @Override
-    public Void visitVarStmt(Stmt.Var stmt){
+    public void visitVarStmt(Stmt.Var stmt) {
         declare(stmt.name);
-        if (stmt.initializer != null){
+        if (stmt.initializer != null) {
             resolve(stmt.initializer);
         }
         define(stmt.name);
+
+    }
+
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt) {
+        resolve(stmt.condition);
+        resolve(stmt.body);
         return null;
     }
 
@@ -129,6 +152,14 @@ public class Resolver implements Expr.Visitor<Void>,Stmt.Visitor {
         resolveLocal(expr, expr.name);
         return null;
     }
+
+    @Override
+    public Void visitBinaryExpr(Expr.Binary expr) {
+        resolve(expr.left);
+        resolve(expr.right);
+        return null;
+    }
+
 
     @Override
     public Void visitVariableExpr(Expr.Variable expr) {
@@ -141,7 +172,6 @@ public class Resolver implements Expr.Visitor<Void>,Stmt.Visitor {
         resolveLocal(expr, expr.name);
         return null;
     }
-
 
 
 }
