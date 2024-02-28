@@ -48,6 +48,13 @@ public class Resolver implements Expr.Visitor<Void>,Stmt.Visitor {
         if (stmt.elseBranch != null) resolve(stmt.elseBranch);
         return null;
     }
+
+    @override
+    public Void visitPrintStmt(Stmt.Print stmt){
+        resolve(stmt.expression);
+        return null;
+    }
+
 //teste commit
 //outro teste
     void resolve(List<Stmt> statements){

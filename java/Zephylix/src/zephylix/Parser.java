@@ -235,7 +235,9 @@ public class Parser {
             Expr right = equality();
             expr = new Expr.Logical(expr, operator, right);
         }
+        return expr;
     }
+
 
 
     private Expr equality() {
