@@ -13,6 +13,20 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
 
     private FunctionType currentFunction = FunctionType.NONE;
 
+    private int localIndex = 0;
+
+    private static class VariableInfo {
+        boolean isDefined;
+        int index;
+
+        VariableInfo(boolean isDefined, int index) {
+            this.isDefined = isDefined;
+            this.index = index;
+        }
+    }
+
+
+
     Resolver(Interpreter interpreter) {
         this.interpreter = interpreter;
     }
@@ -41,7 +55,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         declare(stmt.name);
         define(stmt.name);
 
-        resolveFunction(stmt);
+        resolveFunction(stmt, FunctionType.FUNCTION);
         return null;
     }
 
@@ -65,6 +79,11 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
 
     @Override
     public Void visitReturnStmt(Stmt.Return stmt) {
+
+        if (currentFunction == FunctionType.NONE) {
+            lox.error(stmt.keyword, "Can't return from top-level code.");
+        }
+
         if (stmt.value != null) {
             resolve(stmt.value);
         }
@@ -91,7 +110,11 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         stmt.accept(this);
     }
 
-    private void resolveFunction(Stmt.Function function) {
+    private void resolveFunction(Stmt.Function function, FunctionType type) {
+        FunctionType enclosingFunction = currentFunction;
+        currentFunction = type;
+
+//< set-current-function
         beginScope();
         for (Token param : function.params) {
             declare(param);
@@ -99,8 +122,10 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         }
         resolve(function.body);
         endScope();
+//> restore-current-function
+        currentFunction = enclosingFunction;
+//< restore-current-function
     }
-
 
     private void resolve(Expr expr) {
         expr.accept(this);
@@ -108,6 +133,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
 
     private void beginScope() {
         scopes.push(new HashMap<String, Boolean>());
+        localIndex = 0; // Reiniciar o índice para cada novo escopo
     }
 
     private void endScope() {
@@ -120,7 +146,9 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         if (scope.containsKey(name.lexeme)) {
             lox.error(name, "Variable with this name already declared in this scope.");
         }
-        scope.put(name.lexeme, false);
+        // em caso de erro
+        //scope.put(name.lexeme, false); descomente isso
+        scope.put(name.lexeme, new VariableInfo(false, localIndex++));
     }
 
     private void define(Token name) {
