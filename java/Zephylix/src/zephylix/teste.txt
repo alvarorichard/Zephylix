@@ -1,2 +1,1 @@
-parei no Accessing a resolved variable 11.4.1
-resolving-and-binding
+parei no novo capitulo classes 12 
