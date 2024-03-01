@@ -3,13 +3,12 @@ package zephylix;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.nio.charset.Charset;
-import java.util.*;
 
-import static zephylix.TokenType.*;
+import static zephylix.TokenType.EOF;
 
 
 
@@ -62,6 +61,9 @@ public class lox {
 //            System.out.println(token);
 //        }
         if (hadError) return;
+
+        Resolver resolver = new Resolver(interpreter);
+        resolver.resolve(statements);
         interpreter.interpret(statements);
         System.out.println(new AstPrinter().print(expression));
     }

@@ -4,14 +4,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 import java.util.Map;
+import java.util.function.Function;
 
 public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
     private final Interpreter interpreter;
 
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
 
+    private FunctionType currentFunction = FunctionType.NONE;
+
     Resolver(Interpreter interpreter) {
         this.interpreter = interpreter;
+    }
+
+    private enum FunctionType {
+        NONE,
+        FUNCTION
     }
 
     @Override
