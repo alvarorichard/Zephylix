@@ -1,2 +1,1 @@
-parei no novo capitulo classes 12.4.2
-set expressions
+parei no novo capitulo methods on Classes 12.5
