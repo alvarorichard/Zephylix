@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 import java.util.Map;
-import java.util.function.Function;
 
 public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
     private final Interpreter interpreter;
@@ -89,7 +88,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
     public Void visitReturnStmt(Stmt.Return stmt) {
 
         if (currentFunction == FunctionType.NONE) {
-            lox.error(stmt.keyword, "Can't return from top-level code.");
+            Lox.error(stmt.keyword, "Can't return from top-level code.");
         }
 
         if (stmt.value != null) {
@@ -152,7 +151,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         if (scopes.isEmpty()) return;
         Map<String, Boolean> scope = scopes.peek();
         if (scope.containsKey(name.lexeme)) {
-            lox.error(name, "Variable with this name already declared in this scope.");
+            Lox.error(name, "Variable with this name already declared in this scope.");
         }
         // em caso de erro
         //scope.put(name.lexeme, false); descomente isso

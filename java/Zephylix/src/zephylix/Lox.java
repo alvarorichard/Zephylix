@@ -12,7 +12,7 @@ import static zephylix.TokenType.EOF;
 
 
 
-public class lox {
+public class Lox {
     static boolean hadError = false;
     static boolean hadRuntimeError = false;
 

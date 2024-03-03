@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.Character.isDigit;
-import static javax.management.Query.match;
 import static zephylix.TokenType.*;
 
 
@@ -91,7 +87,7 @@ public class Scanner {
                 } else if (isAlpha(c)){
                     identifier();
                 } else {
-                    lox.error(line, "Unexpected character.");
+                    Lox.error(line, "Unexpected character.");
                 }
                 break;
 
@@ -148,7 +144,7 @@ public class Scanner {
         }
 
         if (isAtEnd() && commentNesting > 0) {
-            lox.error(line, "Unterminated block comment.");
+            Lox.error(line, "Unterminated block comment.");
         }
     }
 
@@ -159,7 +155,7 @@ public class Scanner {
             advance();
         }
         if (isAtEnd()){
-            lox.error(line, "Unterminated string.");
+            Lox.error(line, "Unterminated string.");
             return;
         }
         advance();
