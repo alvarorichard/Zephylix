@@ -6,16 +6,20 @@ import java.util.HashMap;
 
 public class LoxClass implements LoxCallable {
     final String name;
-    private final Map<String, LoxFunction> methods;
+    private final Map<String, LoxFunction> methods, staticMethods;
 
-    LoxClass(String name, Map<String, LoxFunction> methods) {
+    LoxClass(String name, Map<String, LoxFunction> methods, Map<String, LoxFunction> staticMethods) {
         this.name = name;
         this.methods = methods;
+        this.staticMethods = staticMethods;
     }
 
     LoxFunction findMethod(LoxInstance instance, String name) {
         if (methods.containsKey(name)) {
             return methods.get(name);
+        }
+        if (staticMethods.containsKey(name)) {
+            return staticMethods.get(name);
         }
         return null;
     }

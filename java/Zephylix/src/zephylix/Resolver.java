@@ -33,6 +33,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
     private enum FunctionType {
         NONE,
         FUNCTION,
+        INITIALIZER,
         METHOD
     }
 
@@ -124,6 +125,10 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         }
 
         if (stmt.value != null) {
+            if (currentFunction == FunctionType.INITIALIZER) {
+                Lox.error(stmt.keyword,
+                        "Can't return a value from an initializer.");
+            }
             resolve(stmt.value);
         }
         return null;
