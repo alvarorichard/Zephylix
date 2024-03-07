@@ -13,6 +13,13 @@ public class LoxClass implements LoxCallable {
         this.methods = methods;
     }
 
+    LoxFunction findMethod(LoxInstance instance, String name) {
+        if (methods.containsKey(name)) {
+            return methods.get(name);
+        }
+        return null;
+    }
+
 
 
     @Override
