@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Map;
 
+import static zephylix.TokenType.*;
+
+
+
 public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
     private final Interpreter interpreter;
 
