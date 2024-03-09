@@ -65,6 +65,11 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         currentClass = ClassType.CLASS;
         declare(stmt.name);
         define(stmt.name);
+
+        if (smt.superclass !=null){
+            resolve(smt.superclass);
+        }
+
         beginScope();
         scopes.peek().put("this", true);
 
