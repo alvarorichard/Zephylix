@@ -24,6 +24,9 @@ public class LoxClass implements LoxCallable {
         if (staticMethods.containsKey(name)) {
             return staticMethods.get(name);
         }
+        if (superclass != null) {
+            return superclass.findMethod(instance, name);
+        }
         return null;
     }
 

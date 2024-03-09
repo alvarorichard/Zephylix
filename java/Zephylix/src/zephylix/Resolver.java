@@ -34,7 +34,9 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         NONE,
         FUNCTION,
         INITIALIZER,
-        METHOD
+        METHOD,
+        CLASS,
+        SUBCLASS
     }
 
     private enum ClassType {
@@ -67,6 +69,7 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         define(stmt.name);
 
         if (smt.superclass !=null){
+            currentClass = ClassType.SUBCLASS;
             resolve(smt.superclass);
         }
 
@@ -81,6 +84,8 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
             resolveFunction(method, declaration);
         }
         endScope();
+
+        if (stmt.superclass != null) endScope();
 
         currentClass = enclosingClass;
         return null;
@@ -278,6 +283,22 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor {
         resolve(expr.object);
         return null;
     }
+
+    @Override
+    public Void visitSuperExpr(Expr.Super expr) {
+
+        if (currentClass == ClassType.NONE) {
+            Lox.error(expr.keyword,
+                    "Can't use 'super' outside of a class.");
+        } else if (currentClass != ClassType.SUBCLASS) {
+            Lox.error(expr.keyword,
+                    "Can't use 'super' in a class with no superclass.");
+        }
+
+        resolveLocal(expr, expr.keyword);
+        return null;
+    }
+
 
     @Override
     public Void visitThisExpr(Expr.This expr) {
