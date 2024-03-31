@@ -106,6 +106,10 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
 //< Statements and State omit
 //> Functions omit
 
+    // print hello world
+
+
+
     @Override
     public String visitReturnStmt(Stmt.Return stmt) {
         if (stmt.value == null) return "(return)";

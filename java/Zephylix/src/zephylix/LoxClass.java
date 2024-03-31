@@ -37,6 +37,9 @@ public class LoxClass implements LoxCallable {
         this.name = name;
         this.methods = methods;
     }
+
+    
+
     //< lox-class-methods
 //> lox-class-find-method
     LoxFunction findMethod(String name) {
