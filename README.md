@@ -33,4 +33,4 @@ Contributions to Zephylix are welcome, especially from those interested in learn
 
 ### License
 
-Zephylix is licensed under the MIT License. See the LICENSE file for more information.
+Zephylix is licensed under the MIT License. See the LICENSE file for more information
