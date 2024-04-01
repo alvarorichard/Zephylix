@@ -1,0 +1,3 @@
+/home/krone/Zephylix/cmake-build-debug/CMakeFiles/Zephylix.dir
+/home/krone/Zephylix/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/krone/Zephylix/cmake-build-debug/CMakeFiles/rebuild_cache.dir
