@@ -61,6 +61,12 @@ build CMakeFiles/Zephylix.dir/challenges/main.c.o: C_COMPILER__Zephylix_unscanne
   OBJECT_DIR = CMakeFiles/Zephylix.dir
   OBJECT_FILE_DIR = CMakeFiles/Zephylix.dir/challenges
 
+build CMakeFiles/Zephylix.dir/c/sources/chunk.c.o: C_COMPILER__Zephylix_unscanned_Debug /home/krone/Zephylix/c/sources/chunk.c || cmake_object_order_depends_target_Zephylix
+  DEP_FILE = CMakeFiles/Zephylix.dir/c/sources/chunk.c.o.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Zephylix.dir
+  OBJECT_FILE_DIR = CMakeFiles/Zephylix.dir/c/sources
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Zephylix
@@ -69,7 +75,7 @@ build CMakeFiles/Zephylix.dir/challenges/main.c.o: C_COMPILER__Zephylix_unscanne
 #############################################
 # Link the executable Zephylix
 
-build Zephylix: C_EXECUTABLE_LINKER__Zephylix_Debug CMakeFiles/Zephylix.dir/c/sources/main.c.o CMakeFiles/Zephylix.dir/challenges/main.c.o
+build Zephylix: C_EXECUTABLE_LINKER__Zephylix_Debug CMakeFiles/Zephylix.dir/c/sources/main.c.o CMakeFiles/Zephylix.dir/challenges/main.c.o CMakeFiles/Zephylix.dir/c/sources/chunk.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Zephylix.dir
   POST_BUILD = :

@@ -7,4 +7,5 @@ add_executable(Zephylix
         c/sources/main.c
         challenges/main.c
         c/include/common.h
-        c/include/chunk.h)
+        c/include/chunk.h
+        c/sources/chunk.c)
