@@ -18,4 +18,6 @@ build
 
 # arquivo intelij idea
 .idea
+# remover arquivos .class do java
+*.class
  
