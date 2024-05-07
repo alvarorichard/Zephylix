@@ -30,7 +30,3 @@ cd Zephylix
 ### Contributing
 
 Contributions to Zephylix are welcome, especially from those interested in learning about programming language interpretation. If you have suggestions for improvements or encounter any issues, please feel free to open an issue or submit a pull request.
-
-### License
-
-Zephylix is licensed under the MIT License. See the LICENSE file for more information
