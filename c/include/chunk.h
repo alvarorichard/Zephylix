@@ -8,19 +8,17 @@
 #include "../include/common.h"
 
 typedef enum {
-  OP_RETURN,
+	OP_RETURN,
 } OpCode;
 
 typedef struct {
-  uint8_t* code;
-  int count;
-  int capacity;
+	uint8_t *code;
+	int count;
+	int capacity;
 } Chunk;
 
-
-
-void intitChunk(Chunk* chunk);
-void writeChunk(Chunk* chunk, uint8_t byte);
-void freeChunk(Chunk* chunk);
+void intitChunk(Chunk *chunk);
+void writeChunk(Chunk *chunk, uint8_t byte);
+void freeChunk(Chunk *chunk);
 
 #endif // ZEPHYLIX_CHUNK_H
