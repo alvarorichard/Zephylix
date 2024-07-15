@@ -1,0 +1,16 @@
+BasedOnStyle: Google
+IndentWidth: 2
+ColumnLimit: 80
+UseTab: Never
+
+BraceWrapping:
+  AfterControlStatement: true
+  BeforeElse: true
+
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: false
+IndentCaseLabels: false
+SpacesBeforeTrailingComments: 1
+AccessModifierOffset: -2
+BreakBeforeBraces: Linux

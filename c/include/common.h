@@ -5,8 +5,8 @@
 #ifndef ZEPHYLIX_COMMON_H
 #define ZEPHYLIX_COMMON_H
 
-#include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 
-#endif //ZEPHYLIX_COMMON_H
+#endif // ZEPHYLIX_COMMON_H
