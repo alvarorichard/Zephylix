@@ -6,15 +6,20 @@
 #define ZEPHYLIX_CHUNK_H
 
 #include "../include/common.h"
+#include "../include/value.h"
 
 typedef enum {
 	OP_RETURN,
 } OpCode;
 
-typedef struct {
+typedef struct
+{
 	uint8_t *code;
-	int count;
-	int capacity;
+	int       count;
+	int       capacity;
+	
+	ValueArray constants;
+	
 } Chunk;
 
 void intitChunk(Chunk *chunk);

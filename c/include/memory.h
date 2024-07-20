@@ -16,7 +16,7 @@
 #define FREE_ARRAY(type, pointer, oldCount) \
      reallocate(pointer, sizeof(type) * (oldCount), 0)
 
-void reallocate(void* pointer, size_t oldSize, size_t newSize);
+void* reallocate(void* pointer, size_t oldSize, size_t newSize);
 
 // This macro pretties up a function call to reallocate() where the real work
 // happens.
@@ -31,3 +31,4 @@ void reallocate(void* pointer, size_t oldSize, size_t newSize);
 //  use.
 
 #endif // ZEPHYLIX_MEMORY_H
+
