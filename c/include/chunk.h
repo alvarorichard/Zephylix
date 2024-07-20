@@ -12,25 +12,27 @@
 typedef enum {
 	OP_RETURN,
 	OP_CONSTANT,
+	OP_NEGATE,
+	OP_ADD,
+	OP_SUBTRACT,
+	OP_MULTIPLY,
+	OP_DIVIDE,
 } OpCode;
 
-typedef struct
-{
+typedef struct {
 	uint8_t *code;
-	int       count;
-	int       capacity;
-	int       *lines;
-	
-	
+	int count;
+	int capacity;
+	int *lines;
+
 	ValueArray constants;
-	
+
 } Chunk;
 
 void intitChunk(Chunk *chunk);
-//void writeChunk(Chunk *chunk, uint8_t byte);
+// void writeChunk(Chunk *chunk, uint8_t byte);
 void freeChunk(Chunk *chunk);
-int addConstant(Chunk* chunk, Value value);
-void writeChunk(Chunk* chunk, uint8_t byte, int line);
-
+int addConstant(Chunk *chunk, Value value);
+void writeChunk(Chunk *chunk, uint8_t byte, int line);
 
 #endif // ZEPHYLIX_CHUNK_H

@@ -1,8 +1,8 @@
 #ifndef ZEPHYLIX_DEBUG_H
 #define ZEPHYLIX_DEBUG_H
 
-#include "../include/value.h"
-#include "../include/chunk.h"
+#include "value.h"
+#include "chunk.h"
 
 void disassembleChunk(Chunk* chunk, const char* name);
 int disassembleInstruction(Chunk* chunk,int offset);
