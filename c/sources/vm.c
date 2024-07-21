@@ -1,6 +1,7 @@
 #include "../include/common.h"
 #include "../include/vm.h"
 #include "../include/debug.h"
+#include "../include/compiler.h"
 
 
 #include <stdio.h>
@@ -100,6 +101,13 @@ static InterpretResult run()
     #undef BINARY_OP
   
 }
+
+InterpretResult interpret(const char* source) {
+  compile(source);
+  return INTERPRET_OK;
+
+}
+
 
 InterpretResult interpret(Chunk* chunk)
 {

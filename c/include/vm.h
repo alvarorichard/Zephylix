@@ -24,5 +24,6 @@ Value pop();
 
 void initVM();
 void freeVM();
+InterpretResult interpret(const char* source);
 
 #endif // ZEPHYLIX_VM_H
