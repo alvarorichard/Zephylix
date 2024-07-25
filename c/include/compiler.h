@@ -1,6 +1,14 @@
 #ifndef ZEPHYLIX_COMPILER_H
 #define ZEPHYLIX_COMPILER_H
 
-void compile(const char* source);
+#include "chunk.h"
+#include "vm.h"
+#include <stdbool.h>
+
+
+
+bool compile(const char* source, Chunk* chunk);
+
+
 
 #endif

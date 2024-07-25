@@ -34,22 +34,18 @@ typedef struct
 } Token;
 
 typedef struct {
-	const char *start;
-	const char *current;
-	int line;
+    const char *start;
+    const char *current;
+    int line;
 } Scanner;
 
 static char peek(); 
-static char advance();
+static char advanceScanner(); // Renamed advance to advanceScanner
 static bool isAtEnd();
 static char peekNext();
 static bool match(char expected);
 
-
 void initScanner(const char* source);
-
 Token scanToken();
 
-
-
-#endif
+#endif // ZEPHYLIX_SCANNER_H

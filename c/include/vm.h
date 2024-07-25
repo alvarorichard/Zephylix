@@ -14,16 +14,16 @@ typedef struct {
 } VM;
 
 typedef enum {
-	INTERPRET_OK,
-	INTERPRET_COMPILE_ERROR,
-	INTERPRET_RUNTIME_ERROR
+    INTERPRET_OK,
+    INTERPRET_COMPILE_ERROR,
+    INTERPRET_RUNTIME_ERROR
 } InterpretResult;
-
-void push(Value value);
-Value pop();
 
 void initVM();
 void freeVM();
-InterpretResult interpret(const char* source);
+InterpretResult interpretSource(const char* source);
+InterpretResult interpretChunk(Chunk* chunk);
+void push(Value value);
+Value pop();
 
 #endif // ZEPHYLIX_VM_H

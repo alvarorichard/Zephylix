@@ -5,6 +5,7 @@
 
 
 // #include <stdio.h>
+// #include <stdbool.h>
 
 
 // VM vm;
@@ -122,7 +123,7 @@
 #include "../include/debug.h"
 #include "../include/compiler.h"
 #include <stdio.h>
-#include <stdbool.h>  // Include this header for 'true' and 'false'
+#include <stdbool.h>
 
 VM vm;
 
@@ -200,13 +201,24 @@ static InterpretResult run() {
     #undef BINARY_OP
 }
 
-// Renamed this function to avoid conflict
 InterpretResult interpretSource(const char* source) {
-    compile(source);
-    return INTERPRET_OK;
+    Chunk chunk;
+    initChunk(&chunk);
+
+    if (!compile(source, &chunk)) {
+        freeChunk(&chunk);
+        return INTERPRET_COMPILE_ERROR;
+    }
+
+    vm.chunk = &chunk;
+    vm.ip = vm.chunk->code;
+
+    InterpretResult result = run();
+
+    freeChunk(&chunk);
+    return result;
 }
 
-// This function remains as it is
 InterpretResult interpretChunk(Chunk* chunk) {
     vm.chunk = chunk;
     vm.ip = vm.chunk->code;
