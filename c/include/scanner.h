@@ -39,7 +39,7 @@ typedef struct {
 	int line;
 } Scanner;
 
-static char peek(); // Function declarations
+static char peek(); 
 static char advance();
 static bool isAtEnd();
 static char peekNext();
