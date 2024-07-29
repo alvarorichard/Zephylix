@@ -58,7 +58,11 @@ typedef enum {
     OP_DIVIDE,
     OP_NIL,
     OP_TRUE,
+    OP_NOT,
     OP_FALSE,
+    OP_EQUAL,
+    OP_GREATER,
+    OP_LESS,
 } OpCode;
 
 typedef struct {
