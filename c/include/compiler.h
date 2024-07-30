@@ -3,6 +3,7 @@
 
 #include "chunk.h"
 #include "vm.h"
+#include "object.h"
 #include <stdbool.h>
 
 

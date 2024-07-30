@@ -57,6 +57,9 @@ void initChunk(Chunk *chunk)
 	freeValueArray(&chunk->constants);
 }
 
+
+
+
 void writeChunk(Chunk* chunk, uint8_t byte, int line)
 {
 	if (chunk->capacity < chunk->count + 1)

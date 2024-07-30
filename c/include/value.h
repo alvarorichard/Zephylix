@@ -4,11 +4,19 @@
 #include "common.h"
 #include <stdbool.h>
 
+typedef  struct  Obj  Obj ;
+
+#define IS_OBJ(value)     ((value).type == VAL_OBJ) 
+#define AS_OBJ(value)     ((value).as.obj) 
+#define OBJ_VAL(object)   ((Value){VAL_OBJ, {.obj = (Obj*)object}}) 
+
+typedef  struct  ObjString  ObjString ;
 
 typedef enum {
   VAL_BOOL,
   VAL_NIL, 
   VAL_NUMBER,
+  VAL_OBJ
 } ValueType;
 
 typedef struct {
@@ -16,8 +24,12 @@ typedef struct {
   union {
     bool boolean;
     double number;
+    Obj *  obj ;
   } as; 
 } Value;
+
+
+
 
 
 #define IS_BOOL(value)    ((value).type == VAL_BOOL)
