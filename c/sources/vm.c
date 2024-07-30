@@ -234,7 +234,7 @@ static InterpretResult run() {
             case OP_FALSE:   push(BOOL_VAL(false)); break;
             case OP_GREATER:  BINARY_OP(BOOL_VAL, >); break;
                   case OP_LESS:     BINARY_OP(BOOL_VAL, <); break;
-            case OP_ADD:      BINARY_OP(NUMBER_VAL, +); break;
+            //case OP_ADD:      BINARY_OP(NUMBER_VAL, +); break;
             case OP_EQUAL: {
                     Value b = pop();
                     Value a = pop();
