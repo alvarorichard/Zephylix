@@ -1,4 +1,4 @@
-#ifdef ZEPHLIX_OBJ_H
+#ifndef ZEPHLIX_OBJ_H
 #define ZEPHLIX_OBJ_H
 
 
@@ -35,5 +35,4 @@ static  inline  bool  isObjType ( Value  value ,  ObjType  type ) {
    return  IS_OBJ ( value ) &&  AS_OBJ ( value )-> type  ==  type ;
 }
  
-
  #endif 
