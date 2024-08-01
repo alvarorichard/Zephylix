@@ -9,6 +9,10 @@
 
 
 bool compile(const char* source, Chunk* chunk);
+static void printStatement();
+
+
+
 
 
 
