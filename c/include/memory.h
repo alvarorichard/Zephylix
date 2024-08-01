@@ -8,24 +8,41 @@
 #include "common.h"
 #include "object.h"
 
+#define ALLOCATE(type, count) \
+    (type*)reallocate(NULL, 0, sizeof(type) * (count))
+//> free
+
 #define FREE(type, pointer) reallocate(pointer, sizeof(type), 0)
+//< free
 
-#define ALLOCATE(type, count) \ 
-    (type*)reallocate(NULL, 0, sizeof(type) * (count)) 
+//< Strings allocate
+#define GROW_CAPACITY(capacity) \
+    ((capacity) < 8 ? 8 : (capacity) * 2)
+//> grow-array
 
-#define GROW_CAPACITY(capacity) ((capacity) < 8 ? 8 : (capacity) * 2)
-
-#define GROW_ARRAY(type, pointer, oldCount, newCount)          \
-	(type *)reallocate(pointer, sizeof(type) * (oldCount), \
-			   sizeof(type) * (newCount))
+#define GROW_ARRAY(type, pointer, oldCount, newCount) \
+    (type*)reallocate(pointer, sizeof(type) * (oldCount), \
+        sizeof(type) * (newCount))
+//> free-array
 
 #define FREE_ARRAY(type, pointer, oldCount) \
-	reallocate(pointer, sizeof(type) * (oldCount), 0)
+    reallocate(pointer, sizeof(type) * (oldCount), 0)
+//< free-array
 
-void *reallocate(void *pointer, size_t oldSize, size_t newSize);
-
+void* reallocate(void* pointer, size_t oldSize, size_t newSize);
+//< grow-array
+//> Garbage Collection mark-object-h
+void markObject(Obj* object);
+//< Garbage Collection mark-object-h
+//> Garbage Collection mark-value-h
+void markValue(Value value);
+//< Garbage Collection mark-value-h
+//> Garbage Collection collect-garbage-h
+void collectGarbage();
+//< Garbage Collection collect-garbage-h
+//> Strings free-objects-h
 void freeObjects();
-
+//< Strings free-objects-h
 // This macro pretties up a function call to reallocate() where the real work
 // happens.
 //  The macro itself takes care of getting the size of the array’s element type

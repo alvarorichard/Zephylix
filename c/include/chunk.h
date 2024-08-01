@@ -1,45 +1,5 @@
-// //
-// // Created by krone on 4/1/24.
-// //
 
-// #ifndef ZEPHYLIX_CHUNK_H
-// #define ZEPHYLIX_CHUNK_H
 
-// #include "common.h"
-// #include "value.h"
-// #include <stdint.h>
-
-// typedef enum {
-// 	OP_RETURN,
-// 	OP_CONSTANT,
-// 	OP_NEGATE,
-// 	OP_ADD,
-// 	OP_SUBTRACT,
-// 	OP_MULTIPLY,
-// 	OP_DIVIDE,
-// } OpCode;
-
-// typedef struct {
-// 	uint8_t *code;
-// 	int count;
-// 	int capacity;
-// 	int *lines;
-
-// 	ValueArray constants;
-
-// } Chunk;
-
-// void intitChunk(Chunk *chunk);
-// // void writeChunk(Chunk *chunk, uint8_t byte);
-// void freeChunk(Chunk *chunk);
-// int addConstant(Chunk *chunk, Value value);
-// void writeChunk(Chunk *chunk, uint8_t byte, int line);
-
-// #endif // ZEPHYLIX_CHUNK_H
-
-//
-// Created by krone on 4/1/24.
-//
 
 #ifndef ZEPHYLIX_CHUNK_H
 #define ZEPHYLIX_CHUNK_H
@@ -47,6 +7,7 @@
 #include "common.h"
 #include "value.h"
 #include <stdint.h>
+
 
 typedef enum {
 //> op-constant
@@ -141,18 +102,38 @@ typedef enum {
   OP_METHOD
 //< Methods and Initializers method-op
 } OpCode;
+//< op-enum
+//> chunk-struct
 
 typedef struct {
-    uint8_t *code;
-    int count;
-    int capacity;
-    int *lines;
-    ValueArray constants;
+//> count-and-capacity
+  int count;
+  int capacity;
+//< count-and-capacity
+  uint8_t* code;
+//> chunk-lines
+  int* lines;
+//< chunk-lines
+//> chunk-constants
+  ValueArray constants;
+//< chunk-constants
 } Chunk;
+//< chunk-struct
+//> init-chunk-h
 
-void initChunk(Chunk *chunk);  // Corrected typo here
-void freeChunk(Chunk *chunk);
-int addConstant(Chunk *chunk, Value value);
-void writeChunk(Chunk *chunk, uint8_t byte, int line);
+void initChunk(Chunk* chunk);
+//< init-chunk-h
+//> free-chunk-h
+void freeChunk(Chunk* chunk);
+//< free-chunk-h
+/* Chunks of Bytecode write-chunk-h < Chunks of Bytecode write-chunk-with-line-h
+void writeChunk(Chunk* chunk, uint8_t byte);
+*/
+//> write-chunk-with-line-h
+void writeChunk(Chunk* chunk, uint8_t byte, int line);
+//< write-chunk-with-line-h
+//> add-constant-h
+int addConstant(Chunk* chunk, Value value);
+//< add-constant-h
 
 #endif // ZEPHYLIX_CHUNK_H

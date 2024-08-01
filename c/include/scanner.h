@@ -1,8 +1,7 @@
 #ifndef ZEPHYLIX_SCANNER_H
 #define ZEPHYLIX_SCANNER_H
 
-typedef enum 
-{
+typedef enum {
   // Single-character tokens.
   TOKEN_LEFT_PAREN, TOKEN_RIGHT_PAREN,
   TOKEN_LEFT_BRACE, TOKEN_RIGHT_BRACE,
@@ -23,29 +22,20 @@ typedef enum
 
   TOKEN_ERROR, TOKEN_EOF
 } TokenType;
-
-typedef struct 
-{
-    TokenType type;
-    const char* start;
-    int length;
-    int line;
-
-} Token;
+//< token-type
+//> token-struct
 
 typedef struct {
-    const char *start;
-    const char *current;
-    int line;
-} Scanner;
-
-static char peek(); 
-static char advanceScanner(); // Renamed advance to advanceScanner
-static bool isAtEnd();
-static char peekNext();
-static bool match(char expected);
+  TokenType type;
+  const char* start;
+  int length;
+  int line;
+} Token;
+//< token-struct
 
 void initScanner(const char* source);
+//> scan-token-h
 Token scanToken();
+//< scan-token-h
 
 #endif // ZEPHYLIX_SCANNER_H

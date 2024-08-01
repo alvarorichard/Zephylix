@@ -8,8 +8,10 @@
 
 
 
-bool compile(const char* source, Chunk* chunk);
+
 static void printStatement();
+ObjFunction* compile(const char* source);
+void markCompilerRoots();
 
 
 
